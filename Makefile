@@ -13,7 +13,7 @@ help:
 src:
 	@echo "building src"; cd src && $(MAKE) && cd ..
 
-test:
+test: src
 	@echo "building test"; cd test && $(MAKE) && cd ..
 	
 run-test: test
