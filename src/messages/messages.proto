@@ -1,0 +1,20 @@
+// Package of messages
+
+package libarchiver.messages;
+
+message Priority {
+	required int32 level = 1;
+	required int32 color = 2;
+};
+
+message Todo {
+	required int64 id = 1;
+	required string title = 2;
+	required string body = 3;
+	required Priority priority = 4;
+	repeated int64 linked = 5;
+};
+
+message Carnet {
+	repeated Todo todos = 1;
+};
