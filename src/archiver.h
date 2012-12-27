@@ -34,6 +34,11 @@ typedef enum {
 	kGREEN
 } colors_t;
 
+typedef enum {
+	kPRIORITY,
+	kID
+} orders_t;
+
 class archiver {
 
 public:
@@ -63,6 +68,7 @@ public:
 	messages::Carnet const & add_todo(messages::Todo const & itodo);
 	messages::Carnet const & remove_todo(uint32_t const & iid);
 	messages::Carnet const & remove_todo(messages::Todo & itodo);
+	messages::Carnet const & reorder_carnet(libarchiver::orders_t const & iorder);
 
 	/* Save and load */
 	void set_working_file(std::string const & ifile);
@@ -73,6 +79,8 @@ public:
 	friend std::ostream & operator<<(std::ostream& ostream, archiver const & iarchiver);
 
 private:
+	void reorder_priority(uint16_t iindex);
+	void reorder_id(uint16_t iindex);
 	bool is_todo_instantiated() const;
 	void set_highest_id();
 	uint32_t _highestid;

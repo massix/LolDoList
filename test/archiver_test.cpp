@@ -46,6 +46,36 @@
 const std::string title("Essential question");
 const std::string body("The answer is always 42, but which is the question?");
 
+bool test_reorder_methods()
+{
+	libarchiver::archiver archiver;
+
+	// Create a bunch of todos with different priorities
+	for (int i = 0; i < 32; ++i) {
+		archiver.new_todo();
+		archiver.set_title("title");
+		archiver.set_body("body");
+		archiver.set_priority(arc4random() % 32,
+				libarchiver::kYELLOW);
+		archiver.enqueue_todo();
+	}
+
+	archiver.reorder_carnet(libarchiver::kPRIORITY);
+	for (int i = 0; i < archiver.get_carnet().todos_size() - 1; i++) {
+		assert(
+			archiver.get_carnet().todos(i).priority().level() <=
+			archiver.get_carnet().todos(i+1).priority().level());
+	}
+
+	archiver.reorder_carnet(libarchiver::kID);
+	for (int i = 0; i < archiver.get_carnet().todos_size() - 1; i++) {
+		assert(
+			archiver.get_carnet().todos(i).id() <=
+			archiver.get_carnet().todos(i+1).id());
+	}
+
+	return true;
+}
 
 bool test_basic_todo_ptr()
 {
@@ -235,7 +265,7 @@ int main()
 	assert_true(test_load_from_file(1));
 	assert_true(test_add_todo_file());
 	assert_true(test_load_from_file(2));
-
+	assert_true(test_reorder_methods());
 	// Remove temporary file
 	unlink(kFILE);
 }

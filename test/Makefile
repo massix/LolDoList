@@ -17,9 +17,11 @@ all: $(TARGET)
 	
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
-		
-run-test: $(TARGET)
+
+libloldolist.dylib:
 	@ln -s ../src/libloldolist.dylib .
+		
+run-test: $(TARGET) libloldolist.dylib
 	@LD_LIBRARY_PATH=. ./$(TARGET)
 	@rm -f libloldolist.dylib
 	

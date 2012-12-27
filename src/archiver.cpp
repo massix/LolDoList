@@ -182,6 +182,54 @@ Carnet const & archiver::remove_todo(uint32_t const & iid)
 	return _carnet;
 }
 
+Carnet const & archiver::reorder_carnet(orders_t const & iorder)
+{
+	switch (iorder) {
+	case kPRIORITY:
+		reorder_priority(0);
+		break;
+	case kID:
+		reorder_id(0);
+		break;
+	}
+
+	return _carnet;
+}
+
+void archiver::reorder_id(uint16_t iindex)
+{
+	/* no todos (0) or last todo (1) */
+	if (iindex == _carnet.todos_size()) return;
+	if (iindex == _carnet.todos_size()-1) return;
+
+	int tempindex(0);
+	bforeach(Todo const & todo, _carnet.todos()) {
+		if (todo.id() > _carnet.todos(++tempindex).id()) {
+			_carnet.mutable_todos()->SwapElements(tempindex-1, tempindex);
+			reorder_id(tempindex);
+		}
+
+		if (tempindex == _carnet.todos_size()-1) break;
+	}
+}
+
+void archiver::reorder_priority(uint16_t iindex)
+{
+	/* no todos (0) or last todo (1) */
+	if (iindex == _carnet.todos_size()) return;
+	if (iindex == _carnet.todos_size()-1) return;
+
+	int tempindex(0);
+	bforeach(Todo const & todo, _carnet.todos()) {
+		if (todo.priority().level() > _carnet.todos(++tempindex).priority().level()) {
+			_carnet.mutable_todos()->SwapElements(tempindex-1, tempindex);
+			reorder_priority(tempindex);
+		}
+
+		if (tempindex == _carnet.todos_size()-1) break;
+	}
+}
+
 Carnet const & archiver::remove_todo(messages::Todo & itodo)
 {
 	return (remove_todo(itodo.id()));
