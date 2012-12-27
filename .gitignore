@@ -6,3 +6,7 @@
 *.dylib
 test/archiver_test
 
+
+src/loldolist
+
+src/test

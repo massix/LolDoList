@@ -47,6 +47,45 @@ using boost::lexical_cast;
 #define IN_BINARY std::ios_base::in | std::ios_base::binary
 #define OUT_BINARY std::ios_base::out | std::ios_base::binary
 
+#define RESET		0
+#define BRIGHT 		1
+#define DIM		    2
+#define UNDERLINE 	3
+#define BLINK		4
+#define REVERSE		7
+#define HIDDEN		8
+
+#define BLACK       0
+#define RED         1
+#define GREEN       2
+#define YELLOW      3
+#define BLUE        4
+#define MAGENTA     5
+#define CYAN        6
+#define	WHITE       7
+
+string textcolor(int attr, int fg, int bg)
+{
+	string command;
+	command += 0x1b;
+
+	if (attr == RESET) {
+		command += "[";
+		command += "0m";
+	}
+	else {
+		command += "[";
+		command += boost::lexical_cast<string>(attr);
+		command += ";";
+		command += boost::lexical_cast<string>(fg + 30);
+		command += ";";
+		command += boost::lexical_cast<string>(bg + 40);
+		command += "m";
+	}
+
+	return command;
+}
+
 archiver::archiver() :
 	_highestid(0),
 	_todo(0)
@@ -228,6 +267,39 @@ void archiver::reorder_priority(uint16_t iindex)
 
 		if (tempindex == _carnet.todos_size()-1) break;
 	}
+}
+
+Carnet const & archiver::pretty_print_carnet(string & ostring) const
+{
+	ostring.clear();
+
+	bforeach(Todo const & todo, _carnet.todos()) {
+		ostring += "[";
+		ostring += boost::lexical_cast<string>(todo.id());
+		ostring += "] ";
+
+		switch (todo.priority().color()) {
+		case kRED:
+			ostring += textcolor(UNDERLINE, RED, BLACK);
+			break;
+		case kGREEN:
+			ostring += textcolor(UNDERLINE, GREEN, BLACK);
+			break;
+		case kYELLOW:
+			ostring += textcolor(UNDERLINE, YELLOW, BLACK);
+			break;
+		}
+
+		ostring += todo.title();
+		ostring += string("\n");
+		ostring += textcolor(RESET, BLACK, WHITE);
+		ostring += todo.body();
+		ostring += string("\n\n");
+		ostring += "(Pri: ";
+		ostring += boost::lexical_cast<string>(todo.priority().level());
+		ostring += string(")\n\n\n");
+	}
+	return _carnet;
 }
 
 Carnet const & archiver::remove_todo(messages::Todo & itodo)

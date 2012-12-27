@@ -70,6 +70,9 @@ public:
 	messages::Carnet const & remove_todo(messages::Todo & itodo);
 	messages::Carnet const & reorder_carnet(libarchiver::orders_t const & iorder);
 
+	/* Pretty print for CLI clients */
+	messages::Carnet const & pretty_print_carnet(std::string & ostring) const;
+
 	/* Save and load */
 	void set_working_file(std::string const & ifile);
 	void save_work(std::string const & ifile = "");
