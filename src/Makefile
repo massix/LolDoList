@@ -17,7 +17,7 @@ DEFINES = \
 	-DBIN_VERS_REL=${BIN_VERS_REL} \
 	-DBIN_VERS_MIN=${BIN_VERS_MIN}
 
-CXX = clang++
+CXX += clang++
 CXXFLAGS = -Wall -I/usr/local -I. -Imessages ${DEFINES}
 LDFLAGS = -L/usr/local/lib -lprotobuf -lz
 

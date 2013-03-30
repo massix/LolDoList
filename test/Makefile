@@ -1,6 +1,6 @@
 # Makefile for tests
 
-CXX = clang++
+CXX += clang++
 CXXFLAGS = -Wall -I/usr/local -I../src -I../src/messages
 LDFLAGS = -L/usr/local/lib -lprotobuf -lz -L../src -lloldolist
 
