@@ -5,6 +5,9 @@
 *.o
 *.dylib
 test/archiver_test
+*.un~
+*/.clang_complete
+*.swp
 
 
 src/loldolist
